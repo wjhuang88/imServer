@@ -1,9 +1,10 @@
 package com.hhjt.medicine.im.handlers;
 
-import com.hhjt.medicine.im.gears.ChannelMap;
+import com.hhjt.medicine.im.gears.ChannelManager;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.ReferenceCountUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created on 2014/12/24.
@@ -12,8 +13,10 @@ import io.netty.util.ReferenceCountUtil;
  */
 public class ImClientHandler extends ChannelInboundHandlerAdapter {
 
-    private ChannelMap cm = ChannelMap.getInstance();
-    private int contextId;
+    private ChannelManager cm = ChannelManager.getInstance();
+    private String contextId;
+
+    private static Logger l = LoggerFactory.getLogger(ImClientHandler.class);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -27,16 +30,16 @@ public class ImClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
-        ctx.write(msg);
-        ctx.flush();
-        ReferenceCountUtil.release(msg);
+        ChannelHandlerContext toCtx = cm.getChannel("single://172.16.40.13:54857/user");
+        toCtx.write(msg);
+        toCtx.flush();
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
-        cm.removeChannel(contextId);
-        ctx.close();
+        l.error("Connector error, id = " + contextId + " ,detail:" + cause.toString());
+        for (StackTraceElement e : cause.getStackTrace()) {
+            l.debug("~~at " + e.toString());
+        }
     }
 }

@@ -9,6 +9,8 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetAddress;
+
 /**
  * Created on 2014/12/23.
  *
@@ -17,14 +19,27 @@ import org.slf4j.LoggerFactory;
 public class ImServer {
 
     private int port;
-    private Logger l;
+    private static Logger l = LoggerFactory.getLogger(ImServer.class);
 
-    public ImServer(int port) {
+    private ImServer(){}
+
+    private ImServer(int port) {
         this.port = port;
-        l = LoggerFactory.getLogger(this.getClass().getSimpleName());
     }
 
-    public void run() throws Exception {
+    //Singleton instance getter.
+    private static ImServer instance = new ImServer();
+
+    public static ImServer getInstance() {
+        return instance;
+    }
+
+    public ImServer setPort(int port) {
+        this.port = port;
+        return this;
+    }
+
+    public void run() {
         l.info("Server initializing.");
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -42,11 +57,13 @@ public class ImServer {
             b.childOption(ChannelOption.SO_KEEPALIVE, true);
 
             ChannelFuture f = b.bind(port).sync();
-            l.info("Server started.");
+            l.info("Server started, socket = /" + InetAddress.getLocalHost().getHostAddress() + ":" + port);
 
             f.channel().closeFuture().sync();
             l.info("Server closing.");
 
+        } catch (Exception e) {
+            l.error(e.getMessage());
         } finally {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
@@ -68,6 +85,7 @@ public class ImServer {
 //        session.commit();
 //        session.close();
 //        System.out.println(rst);
+
         int port;
         if (args.length > 0) {
             port = Integer.parseInt(args[0]);
