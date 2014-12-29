@@ -35,12 +35,14 @@ public class ChannelManager {
         return id;
     }
 
-    public void removeChannel(String id) {
+    public ChannelHandlerContext removeChannel(String id) {
         if (channelMap.containsKey(id)) {
-            channelMap.remove(id);
+            ChannelHandlerContext removed = channelMap.remove(id);
             l.info("Client disconnected, id = " + id);
+            return removed;
         } else {
             l.info("Client not exists, id = " + id);
+            return null;
         }
     }
 

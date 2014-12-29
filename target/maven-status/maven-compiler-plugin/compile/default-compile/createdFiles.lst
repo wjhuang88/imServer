@@ -2,5 +2,7 @@ com/hhjt/medicine/im/gears/Common.class
 com/hhjt/medicine/im/handlers/ImClientHandler.class
 com/hhjt/medicine/im/entities/User.class
 com/hhjt/medicine/im/ImServer.class
+com/hhjt/medicine/im/gears/UserManager.class
 com/hhjt/medicine/im/ImServer$1.class
-com/hhjt/medicine/im/gears/ChannelMap.class
+com/hhjt/medicine/im/gears/UserData.class
+com/hhjt/medicine/im/gears/ChannelManager.class

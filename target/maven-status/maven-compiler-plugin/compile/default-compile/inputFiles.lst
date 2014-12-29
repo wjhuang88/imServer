@@ -1,5 +1,7 @@
-/Users/GHuang/IdeaProjects/imServer/src/main/java/com/hhjt/medicine/im/gears/ChannelMap.java
+/Users/GHuang/IdeaProjects/imServer/src/main/java/com/hhjt/medicine/im/gears/UserManager.java
 /Users/GHuang/IdeaProjects/imServer/src/main/java/com/hhjt/medicine/im/ImServer.java
 /Users/GHuang/IdeaProjects/imServer/src/main/java/com/hhjt/medicine/im/gears/Common.java
 /Users/GHuang/IdeaProjects/imServer/src/main/java/com/hhjt/medicine/im/handlers/ImClientHandler.java
+/Users/GHuang/IdeaProjects/imServer/src/main/java/com/hhjt/medicine/im/gears/UserData.java
 /Users/GHuang/IdeaProjects/imServer/src/main/java/com/hhjt/medicine/im/entities/User.java
+/Users/GHuang/IdeaProjects/imServer/src/main/java/com/hhjt/medicine/im/gears/ChannelManager.java
