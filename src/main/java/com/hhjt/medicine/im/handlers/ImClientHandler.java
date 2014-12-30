@@ -9,6 +9,10 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created on 2014/12/24.
  *
@@ -21,7 +25,7 @@ public class ImClientHandler extends ChannelInboundHandlerAdapter {
 
     private String contextId;
 
-    private static Logger l = LoggerFactory.getLogger(ImClientHandler.class);
+    private Logger l = LoggerFactory.getLogger(ImClientHandler.class);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -35,18 +39,57 @@ public class ImClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+
         ByteBuf in = (ByteBuf) msg;
-        ByteBuf content = ctx.alloc().buffer(4);
-        content.writeBytes(in);
-        in.release();
-        l.info("get:");
+
+        StringBuilder msgBuilder = new StringBuilder();
+        Character cmd = null;
+
+        String uid;
+
+        if (in.isReadable()) {
+            cmd = (char) in.readByte();
+        }
+        while (in.isReadable()) {
+            msgBuilder.append((char) in.readByte());
+        }
+        if (msgBuilder.length() >= 11) {
+            uid = msgBuilder.substring(0, 11);
+        } else {
+            uid = null;
+        }
+
+        String res;
+        ChannelHandlerContext toCtx = ctx;
+        assert cmd != null;
+        switch (cmd) {
+            case '0':
+                res = "Ping Pong.";
+                break;
+            case '1':
+                um.addUser(new UserData(uid, this.contextId));
+                res = "Register.";
+                break;
+            case '2':
+                String to = msgBuilder.substring(11, 22);
+                toCtx = cm.getChannel(um.getUser(to).getUserConnectId());
+                res = "\nMessage from: " + uid + "\n" + msgBuilder.substring(23);
+                break;
+            default:
+                res = "error";
+        }
+
+        ByteBuf out = toCtx.alloc().buffer(res.length());
+        out.writeBytes(res.getBytes());
+        toCtx.writeAndFlush(out);
+
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         l.error("Connector error, id = " + contextId + " ,detail:" + cause.toString());
         for (StackTraceElement e : cause.getStackTrace()) {
-            l.debug("~~at " + e.toString());
+            l.error("~~at " + e.toString());
         }
     }
 }

@@ -19,7 +19,7 @@ import java.net.InetAddress;
 public class ImServer {
 
     private int port;
-    private static Logger l = LoggerFactory.getLogger(ImServer.class);
+    private Logger l = LoggerFactory.getLogger(ImServer.class);
 
     private ImServer(){}
 
@@ -92,6 +92,6 @@ public class ImServer {
         } else {
             port = 8080;
         }
-        new ImServer(port).run();
+        instance.setPort(port).run();
     }
 }

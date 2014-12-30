@@ -20,11 +20,10 @@ public class ChannelManager {
     }
 
     private Map<String, ChannelHandlerContext> channelMap;
-    private Logger l;
+    private Logger l = LoggerFactory.getLogger(ChannelManager.class);
 
     private ChannelManager() {
         this.channelMap = new HashMap<String, ChannelHandlerContext>();
-        l = LoggerFactory.getLogger(this.getClass().getSimpleName());
         l.info("Client map initialized.");
     }
 
