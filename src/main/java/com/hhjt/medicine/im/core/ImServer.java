@@ -1,6 +1,8 @@
-package com.hhjt.medicine.im;
+package com.hhjt.medicine.im.core;
 
-import com.hhjt.medicine.im.handlers.ImClientHandler;
+import com.hhjt.medicine.im.gears.handlers.ImClientHandler;
+import com.hhjt.medicine.im.gears.handlers.MessageDecoder;
+import com.hhjt.medicine.im.gears.handlers.MessageEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -50,7 +52,7 @@ public class ImServer {
             b.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel socketChannel) throws Exception {
-                    socketChannel.pipeline().addLast(new ImClientHandler());
+                    socketChannel.pipeline().addLast(new MessageDecoder(), new MessageEncoder(), new ImClientHandler());
                 }
             });
             b.option(ChannelOption.SO_BACKLOG, 128);

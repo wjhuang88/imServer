@@ -1,9 +1,9 @@
 package com.hhjt.medicine.im.gears;
 
+import io.netty.util.internal.chmv8.ConcurrentHashMapV8;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,7 +21,7 @@ public class UserManager {
     private Logger l = LoggerFactory.getLogger(ChannelManager.class);
 
     private UserManager() {
-        userMap = new HashMap<String, UserData>();
+        userMap = new ConcurrentHashMapV8<String, UserData>();
     }
 
     public String addUser(UserData data) {

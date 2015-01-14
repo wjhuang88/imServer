@@ -1,4 +1,4 @@
-package com.hhjt.medicine.im.entities;
+package com.hhjt.medicine.im.gears.entities;
 
 /**
  * Created on 2014/12/23.

@@ -2,8 +2,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.hhjt.medicine.im.entities">
-    <resultMap type="com.hhjt.medicine.im.entities.User" id="usermap">
+<mapper namespace="com.hhjt.medicine.im.gears.entities">
+    <resultMap type="com.hhjt.medicine.im.gears.entities.User" id="usermap">
         <id column="id" property="id"/>
         <result column="username" property="username"/>
         <result column="hashedPassword" property="hashedPassword"/>
